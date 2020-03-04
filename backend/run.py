@@ -1,10 +1,20 @@
 from flask import Flask, jsonify, render_template, send_file
 from flask_cors import CORS
 import os
+import firebase_admin
+from firebase_admin import credentials, db
 
 #app = Flask(__name__, static_folder='public', static_url_path='')
 app = Flask(__name__)
 CORS(app)
+
+cred = credentials.Certificate("db_private_key.json")
+firebase_admin.initialize_app(cred, {
+    "databaseURL": "https://cs-530-digital-jeopardy.firebaseio.com"
+})
+# ref = db.reference("/test")
+# ref.push({"a": "b"})
+
 
 @app.route('/games', methods=['GET'])
 def getGames():
