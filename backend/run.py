@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, render_template, send_file
+from flask import Flask, jsonify, render_template, send_file, request
 from flask_cors import CORS
 import os
 import firebase_admin
 from firebase_admin import credentials, db
+import json
 
 #app = Flask(__name__, static_folder='public', static_url_path='')
 app = Flask(__name__)
@@ -22,6 +23,17 @@ def getGames():
         "h": "o"
     }
     return jsonify(data)
+
+@app.route('/create-game', methods=['POST'])
+def createGame():
+    print("creating game...")
+    game = request.json['game']
+    game = json.loads(game)
+    print(game)
+    ref = db.reference('games')
+    key = ref.push(game).key
+    return jsonify(gamekey=key)
+    
 
 # # Handle the index (home) page
 # @app.route('/')
