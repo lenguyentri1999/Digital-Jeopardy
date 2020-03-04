@@ -19,10 +19,8 @@ firebase_admin.initialize_app(cred, {
 
 @app.route('/games', methods=['GET'])
 def getGames():
-    data = {
-        "h": "o"
-    }
-    return jsonify(data)
+    ref = db.reference('games')
+    return jsonify(ref.get())
 
 @app.route('/create-game', methods=['POST'])
 def createGame():
