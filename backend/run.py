@@ -13,8 +13,6 @@ cred = credentials.Certificate("db_private_key.json")
 firebase_admin.initialize_app(cred, {
     "databaseURL": "https://cs-530-digital-jeopardy.firebaseio.com"
 })
-# ref = db.reference("/test")
-# ref.push({"a": "b"})
 
 
 @app.route('/games', methods=['GET'])
@@ -67,4 +65,10 @@ def createGame():
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8080, debug=True)
+
+    production = True
+    myPort = 8126
+    if production:
+        app.run(host='0.0.0.0', port=myPort)
+    else:
+        app.run(host='127.0.0.1', port=8080, debug=True)
