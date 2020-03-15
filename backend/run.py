@@ -26,10 +26,30 @@ def createGame():
     game = request.json['game']
     game = json.loads(game)
     print(game)
-    ref = db.reference('games')
-    key = ref.push(game).key
-    return jsonify(gamekey=key)
+    ref = db.reference('games/' + game['id'])
+    ref.update(game)
+    return jsonify(gamekey=game['id'])
+
+
+@app.route('/send-score', methods=['POST'])
+def sendScore():
+    print("adding score...")
+    name = request.json['name']
+    score = request.json['score']
+    id = request.json['id']
+    print(id)
+    ref = db.reference('scores/' + id)
+    ref.push({"name": name, "score": score})
+    return jsonify(done='true')
     
+
+@app.route('/get-score', methods=['POST'])
+def getScore():
+    print("getting score...")
+    id = request.json['id']
+    print(id)
+    ref = db.reference('scores/' + id)
+    return jsonify(ref.get())
 
 # # Handle the index (home) page
 # @app.route('/')
